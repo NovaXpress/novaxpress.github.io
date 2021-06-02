@@ -18,7 +18,7 @@ function format(input) {
     let province = cells[15];
     let postalCode = cells[16];
     let customerName = cells[11];
-    let confirmation = deliveryLocation || signedBy;
+    let confirmation = signedBy || deliveryLocation;
 
     if (statusDescription.includes('delivery')) {
         if (signedBy) {
