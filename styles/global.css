@@ -1,0 +1,32 @@
+.horizontal-stretch {
+    width: 100%;
+}
+
+.vertial-stretch {
+    height: 100%;
+}
+
+.stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.small-gap {
+    gap: 0.25rem;
+}
+
+.medium-gap {
+    gap: 1rem;
+}
+
+.large-gap {
+    gap: 2rem;
+}
+
+input {
+    box-sizing: border-box;
+    border: 1px solid gray;
+    outline: none;
+}

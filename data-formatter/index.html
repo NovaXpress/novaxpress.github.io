@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Formatter</title>
+
+    <link rel="stylesheet" href="/styles/tabs.css">
+    <link rel="stylesheet" href="/styles/pages.css">
+    <link rel="stylesheet" href="/styles/forms.css">
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="styles/main.css">
+
+    <script src="/scripts/pages.js" defer></script>
+    <script src="/scripts/forms.js" defer></script>
+    <script src="/scripts/tabs.js" defer></script>
+    <script src="scripts/main.js" defer></script>
+</head>
+<body>
+    <form form="formatter">
+        <h3>Data Reformatter</h3>
+        <div form-messages></div>
+        <input type="file" name="to-format" id="to-format">
+        <div id="formatters"></div>
+        <input type="submit" value="Format">
+        <div id="download-container"></div>
+    </form>
+</body>
+</html>

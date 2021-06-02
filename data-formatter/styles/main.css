@@ -1,0 +1,33 @@
+html {
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+[form="formatter"] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid gray;
+}
+
+[form="formatter"] h3 {
+    margin: 0;
+}
+
+#formatters {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    border: 1px solid gray;
+    padding: 0.5rem;
+}

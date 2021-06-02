@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header, footer {
+    padding: 1rem;
+    background-color: dodgerblue;
+    color: white;
+    text-align: center;
+}
+
+main {
+    margin: 1rem;
+    flex-grow: 1;
+}
+
+[auth], [no-auth] {
+    display: none;
+}
+
+[auth][authenticated="true"] {
+    display: block;
+}
+
+[no-auth][authenticated="false"] {
+    display: block;
+}

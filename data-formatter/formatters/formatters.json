@@ -1,0 +1,12 @@
+[
+    {
+        "name": "UPS_MAN to ShipTrack",
+        "file": "ups-man-to-shiptrack.js",
+        "output_extension": "csv"
+    },
+    {
+        "name": "ShipTrack to UPS Report",
+        "file": "shiptrack-to-ups-report.js",
+        "output_extension": "csv"
+    }
+]

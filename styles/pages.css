@@ -1,0 +1,9 @@
+[page] {
+    display: none;
+    border: 1px solid gray;
+    padding: 1rem;
+}
+
+[page][active] {
+    display: block;
+}
