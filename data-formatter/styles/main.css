@@ -25,9 +25,21 @@ body {
     margin: 0;
 }
 
+#to-format {
+    padding: 1rem;
+}
+
 #formatters {
     display: grid;
     grid-template-columns: min-content 1fr;
     border: 1px solid gray;
     padding: 0.5rem;
+}
+
+main {
+    max-width: 600px;
+}
+
+#information h4 {
+    margin-bottom: 0;
 }

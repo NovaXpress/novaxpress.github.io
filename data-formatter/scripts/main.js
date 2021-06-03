@@ -35,11 +35,10 @@ fetch('formatters/formatters.json').then(response => response.json()).then(async
             formatters[formatterJSON.file].function = formatFunction;
         } catch (error) {
             console.log(`Failed to load formatter ${formatterJSON.file}: ${error.message}`);
+            alert(`Failed to load "${formatterJSON.name}" formatter.`);
         }
     }
 });
-
-// const formattingToolsSource = fetch('formatters/formatters.json').then(response => response.text());
 
 FORMS.getForm('formatter')['to-format'].onchange = () => {
     const downloadContainer = document.getElementById('download-container');
@@ -48,25 +47,34 @@ FORMS.getForm('formatter')['to-format'].onchange = () => {
 
 FORMS.register('formatter', async data => {
     try {
-        const fileData = await readFileData(data['to-format']);
+        const file = data['to-format'];
+        const fileData = await readFileData(file);
 
         const formatterFile = data['formatter'];
         const formatter = formatters[formatterFile];
 
         const formattedRows = [];
-        for (const input of fileData.split('\n')) {
-            if (input) {
-                const output = formatter.function(input);
+        const lines = fileData.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (line) {
+                const output = formatter.function(line, i);
                 if (output) {
-                    formattedRows.push(output);
+                    if (Array.isArray(output)) {
+                        formattedRows.push(...output);
+                    } else {
+                        formattedRows.push(output);
+                    }
                 }
             }
         }
 
+        const outputFileName = file.name.replace(/\.[A-Za-z]+/, '-generated.' + formatter['output_extension']);
+
         const formattedData = formattedRows.join('\n');
         const downloadElement = document.createElement('a');
         downloadElement.href = `data:text/plain;charset=utf-8,${encodeURIComponent(formattedData)}`;
-        downloadElement.download = 'formatted.csv';
+        downloadElement.download = outputFileName;
         downloadElement.innerText = 'Download';
 
         const downloadContainer = document.getElementById('download-container');
@@ -78,6 +86,7 @@ FORMS.register('formatter', async data => {
         console.error(error);
         FORMS.display('formatter', 'Failed to perform reformat', 'error', true);
         FORMS.display('formatter', error.message, 'error', false);
+        FORMS.display('formatter', 'Did you choose the correct formatter?', 'error', false);
         return false;
     }
 });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,14 +18,53 @@
     <script src="/scripts/tabs.js" defer></script>
     <script src="scripts/main.js" defer></script>
 </head>
+
 <body>
-    <form form="formatter">
-        <h3>Data Reformatter</h3>
-        <div form-messages></div>
-        <input type="file" name="to-format" id="to-format">
-        <div id="formatters"></div>
-        <input type="submit" value="Format">
-        <div id="download-container"></div>
-    </form>
+    <main>
+        <form form="formatter">
+            <h3>NovaXpress Spreadsheet Reformatter</h3>
+            <p>Upload a spreadsheet in a certain format, and download it in a different one. If a new formatter is
+                required, please reach out to <a href="mailto:jeremy@novaxpress.ca">jeremy@novaxpress.ca</a> to write
+                you one.</p>
+            <div form-messages></div>
+            <div class="stacked">
+                <label for="to-format">Upload Spreadsheet</label>
+                <input type="file" name="to-format" id="to-format">
+            </div>
+            <div class="stacked">
+                <label for="formatters">Select Formatter</label>
+                <div id="formatters"></div>
+            </div>
+            <input type="submit" value="Format">
+            <div id="download-container"></div>
+        </form>
+
+        <section id="information">
+            <div>
+                <h3>Known Bugs</h3>
+                <ul>
+                    <li>"ShipTrack to UPS Report" option is not available on Safari. For the meantime please use Chrome.
+                    </li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <div>
+                <h3>Change Log</h3>
+                <h4>June 3</h4>
+                <ul>
+                    <li>Added support for headers on the output file.</li>
+                    <li>The output file name is now based on the input file name.</li>
+                </ul>
+
+                <h4>June 2</h4>
+                <ul>
+                    <li>"ShipTrack to UPS Report" now favors showing signatures over locations.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>
