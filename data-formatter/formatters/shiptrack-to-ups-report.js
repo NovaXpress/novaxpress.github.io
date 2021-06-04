@@ -19,7 +19,7 @@ function format(input, lineNumber) {
         let routeIdentifier = 'NXW';
         let barcode = cells[0];
         let time = cells[46];
-        let status = '!!! MISSING INFORMATION !!!';
+        let status = `!!! MISSING INFORMATION !!! (Status Description: "${cells[27]}")`;
         let streetName = cells[12];
         let city = cells[14];
         let province = cells[15];

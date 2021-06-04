@@ -1,0 +1,16 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid gray;
+}
+
+form > h3 {
+    margin-top: 0;
+}

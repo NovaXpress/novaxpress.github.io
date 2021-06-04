@@ -43,7 +43,19 @@ const FORMS = {
         for (const form of this.getForms()) {
             form.onsubmit = () => {
                 if (form.formSubmitHandler) {
-                    const formData = Object.fromEntries(new FormData(form));
+                    const formData = {};
+                    new FormData(form).forEach((value, key) => {
+                        if (!(key in formData)) {
+                            formData[key] = value;
+                        } else {
+                            if (Array.isArray(formData[key])) {
+                                formData[key].push(value);
+                            } else {
+                                const existingValue = formData[key];
+                                formData[key] = [existingValue, value];
+                            }
+                        }
+                    });
                     try {
                         const result = form.formSubmitHandler(formData);
                         if (result instanceof Promise) {

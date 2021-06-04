@@ -10,12 +10,16 @@
     gap: 0.25rem;
 }
 
+[form-messages] .success {
+    color: lime;
+}
+
 [form-messages] .info {
     color: gray;
 }
 
 [form-messages] .warn {
-    color: green;
+    color: yellow;
 }
 
 [form-messages] .error {

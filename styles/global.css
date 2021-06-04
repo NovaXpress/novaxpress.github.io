@@ -1,3 +1,19 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.simple-container {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.rack-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr min-content;
+    gap: 0 0.5rem;
+}
+
 .horizontal-stretch {
     width: 100%;
 }
@@ -27,6 +43,7 @@
 
 input {
     box-sizing: border-box;
+    padding: 0.5rem;
     border: 1px solid gray;
     outline: none;
 }
