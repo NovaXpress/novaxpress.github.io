@@ -29,7 +29,7 @@
 <body>
     <form form="import">
         <h3>Import Data</h3>
-        <div form-messages></div>
+        <div formMessages></div>
         <label for="pdf">Intelcom PDF Parser</label>
         <input type="file" name="pdf" id="pdf" multiple>
         <input type="submit" value="Submit">
@@ -37,14 +37,14 @@
 
     <form form="export">
         <h3>Export Data</h3>
-        <div form-messages></div>
-        <div class="rack-container">
-            <label for="export-from">From</label>
-            <input type="week" name="export-from" id="export-from">
-            <label for="export-to">To</label>
-            <input type="week" name="export-to" id="export-to">
+        <div formMessages></div>
+        <div class="rackContainer">
+            <label for="exportFrom">From</label>
+            <input type="week" name="exportFrom" id="exportFrom" value="2021-W17">
+            <label for="exportTo">To</label>
+            <input type="week" name="exportTo" id="exportTo" value="2021-W17">
         </div>
-        <div class="simple-container">
+        <div class="simpleContainer">
             <input type="submit" value="Export">
         </div>
     </form>

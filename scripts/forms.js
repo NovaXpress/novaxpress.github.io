@@ -21,14 +21,14 @@ const FORMS = {
     },
     clearDisplay(nameOrElement) {
         const element = this.ensureIsElement(nameOrElement);
-        const messages = element.querySelector('[form-messages]');
+        const messages = element.querySelector('[formMessages]');
         if (messages) {
             while (messages.lastChild) messages.lastChild.remove();
         }
     },
     display(nameOrElement, message, type, clear = true) {
         const element = this.ensureIsElement(nameOrElement);
-        const messages = element.querySelector('[form-messages]');
+        const messages = element.querySelector('[formMessages]');
         if (!messages) {
             console.warn('Attempted to display form message without display element');
             return;

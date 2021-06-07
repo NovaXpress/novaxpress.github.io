@@ -2,23 +2,23 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.simple-container {
+.simpleContainer {
     display: grid;
     grid-template-columns: 1fr;
 }
 
-.rack-container {
+.rackContainer {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: 1fr min-content;
     gap: 0 0.5rem;
 }
 
-.horizontal-stretch {
+.horizontalStretch {
     width: 100%;
 }
 
-.vertial-stretch {
+.vertialStretch {
     height: 100%;
 }
 
@@ -29,15 +29,15 @@ body {
     align-items: stretch;
 }
 
-.small-gap {
+.smallGap {
     gap: 0.25rem;
 }
 
-.medium-gap {
+.mediumGap {
     gap: 1rem;
 }
 
-.large-gap {
+.largeGap {
     gap: 2rem;
 }
 

@@ -1,4 +1,5 @@
 function format(input, lineNumber) {
+    console.log(input);
     const lines = [];
 
     if (lineNumber == 0) {
@@ -13,19 +14,18 @@ function format(input, lineNumber) {
     const service = cells[3];
     const statusDescription = cells[27].toLowerCase();
 
-    if (service === 'UPS_STD') {
-
+    if (service === 'UPS_STD' || true) {
         let buildingIdentifier = 'HAL';
         let routeIdentifier = 'NXW';
-        let barcode = cells[0];
-        let time = cells[46];
-        let status = `!!! MISSING INFORMATION !!! (Status Description: ${cells[27]})`;
-        let streetName = cells[12];
-        let city = cells[14];
-        let province = cells[15];
-        let postalCode = cells[16];
-        let customerName = cells[11];
-        let confirmation = signedBy || deliveryLocation;
+        let barcode = cells[0] || '!!! MISSING INFORMATION !!!';
+        let time = cells[46] || '!!! MISSING INFORMATION !!!';
+        let status = `!!! MISSING INFORMATION !!! (Status Description: ${statusDescription || '[NONE]'})`;
+        let streetName = cells[12] || '!!! MISSING INFORMATION !!!';
+        let city = cells[14] || '!!! MISSING INFORMATION !!!';
+        let province = cells[15] || '!!! MISSING INFORMATION !!!';
+        let postalCode = cells[16] || '!!! MISSING INFORMATION !!!';
+        let customerName = cells[11] || '!!! MISSING INFORMATION !!!';
+        let confirmation = signedBy || deliveryLocation || '';
 
         if (statusDescription.includes('delivery')) {
             if (signedBy) {

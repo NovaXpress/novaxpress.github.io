@@ -8,7 +8,7 @@
     display: block;
 }
 
-[tab-bar] > button {
+[tabBar] > button {
     position: relative;
     background-color: #888888;
     color: black;
@@ -19,15 +19,15 @@
     cursor: pointer;
 }
 
-[tab-bar] > button:first-child {
+[tabBar] > button:first-child {
     border-left: solid 1px gray;
 }
 
-[tab-bar] > button[active] {
+[tabBar] > button[active] {
     background-color: white;
 }
 
-[tab-bar] > button[active]::after {
+[tabBar] > button[active]::after {
     position: absolute;
     content: ' ';
     bottom: -1px;

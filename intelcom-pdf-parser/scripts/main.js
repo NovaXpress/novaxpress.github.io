@@ -37,7 +37,7 @@ function attemptLineMatch(data, index, matches) {
 }
 
 FORMS.register('import', async formData => {
-    const files = formData['pdf'];
+    let files = formData['pdf'];
     if (!Array.isArray(files)) files = [files];
 
     const invoices = await Promise.all(files.map(file => new Promise((resolve, reject) => {
@@ -90,17 +90,17 @@ FORMS.register('import', async formData => {
             for (const row of rows) {
                 delivery.push({
                     'date': new Date(row[0]),
-                    'with-signature': {
+                    'withSignature': {
                         'quantity': parseInt(row[3]),
                         'commission': currency(row[2])
                     },
-                    'without-signature': {
+                    'withoutSignature': {
                         'quantity': parseInt(row[3]),
                         'commission': currency(row[4])
                     },
                     'amount': currency(row[6]),
-                    'additional-payout': currency(row[7]),
-                    'grand-total': currency(row[8])
+                    'additionalPayout': currency(row[7]),
+                    'grandTotal': currency(row[8])
                 });
             }
 
@@ -108,9 +108,14 @@ FORMS.register('import', async formData => {
             const year = parseInt(weekPieces[0]);
             const week = parseInt(weekPieces[1]);
 
+            const idNameSeperation = driver.indexOf(' ');
+            const id = driver.substr(0, idNameSeperation);
+            const name = driver.substr(idNameSeperation + 1);
+
             resolve({
-                'driver': driver,
-                'invoice-number': invoiceNumber,
+                'id': id,
+                'name': name,
+                'invoiceNumber': invoiceNumber,
                 'year': year,
                 'week': week,
                 'delivery': delivery
@@ -122,8 +127,8 @@ FORMS.register('import', async formData => {
 
     const results = await Promise.all(invoices.map(invoice => {
         const database = firebase.firestore();
-        const invoiceNumber = invoice['invoice-number'];
-        delete invoice['invoice-number'];
+        const invoiceNumber = invoice.invoiceNumber;
+        delete invoice.invoiceNumber;
         return database.collection('invoices').doc(invoiceNumber).set(invoice);
     }));
 
@@ -160,12 +165,10 @@ function getYearAndWeek(string) {
 FORMS.register('export', async formData => {
     const database = firebase.firestore();
 
-    const [fromYear, fromWeek] = getYearAndWeek(formData['export-from']);
-    const [toYear, toWeek] = getYearAndWeek(formData['export-to']);
+    const [fromYear, fromWeek] = getYearAndWeek(formData.exportFrom);
+    const [toYear, toWeek] = getYearAndWeek(formData.exportTo);
 
     const query = await database.collection('invoices').where('week', '>=', fromWeek).where('week', '<=', toWeek).get();
-
-    const rows = [];
 
     const header = [];
     header.push('Beneficiary', 'TrPr', 'RtN', 'RtY', 'Rtl');
@@ -173,22 +176,23 @@ FORMS.register('export', async formData => {
         header.push(`W${i} SgN`, `W${i} SgY`, `W${i} InvAmt`, `W${i} InvPr`);
     }
     header.push('Ttl SgN', 'TtlSgY', 'TtlIvPr', 'Ttl InvAmt', 'Gross Earnings');
-    rows.push(header);
 
-    const weekSpecificOffset = 5;
-    const weekSpecificColumns = 4;
+    const weekOffset = 5;
+    const weekColumns = 4;
+
+    const data = {};
 
     query.forEach(invoiceDocument => {
         const invoice = invoiceDocument.data();
         if (invoice.year >= fromYear && invoice.year <= toYear) {
-            const row = new Array(header.length).fill('Unknown');
-            row[0] = invoice.driver;
 
-            const weekOffset = invoice.week - fromWeek;
-            row[weekSpecificOffset + weekOffset * weekSpecificColumns + 0] = invoice.delivery.reduce((total, day) => total + day['without-signature']['quantity'], 0);
-            row[weekSpecificOffset + weekOffset * weekSpecificColumns + 1] = invoice.delivery.reduce((total, day) => total + day['with-signature']['quantity'], 0);
         }
     });
+
+    const rows = [header, ...Object.values(data)];
+    for (const row of rows) {
+        console.log(row.join(','));
+    }
 
     if (rows.length === 1) {
         FORMS.display('export', 'No results to export. Try changing your date range.', 'error');

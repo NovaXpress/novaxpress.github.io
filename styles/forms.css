@@ -2,7 +2,7 @@
     padding: 1rem;
 }
 
-[form-messages] {
+[formMessages] {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -10,19 +10,19 @@
     gap: 0.25rem;
 }
 
-[form-messages] .success {
+[formMessages] .success {
     color: lime;
 }
 
-[form-messages] .info {
+[formMessages] .info {
     color: gray;
 }
 
-[form-messages] .warn {
+[formMessages] .warn {
     color: yellow;
 }
 
-[form-messages] .error {
+[formMessages] .error {
     color: red;
 }
 

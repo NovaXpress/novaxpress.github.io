@@ -20,7 +20,7 @@ main {
     flex-grow: 1;
 }
 
-[auth], [no-auth] {
+[auth], [noAuth] {
     display: none;
 }
 
@@ -28,6 +28,6 @@ main {
     display: block;
 }
 
-[no-auth][authenticated="false"] {
+[noAuth][authenticated="false"] {
     display: block;
 }

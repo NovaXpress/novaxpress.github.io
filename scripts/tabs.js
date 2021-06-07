@@ -39,7 +39,7 @@ const TABS = {
     },
     load() {
         for (const container of this.getTabContainers()) {
-            const tabBar = container.querySelector('[tab-bar]');
+            const tabBar = container.querySelector('[tabBar]');
             if (tabBar) {
                 for (const tab of this.getTabs(container)) {
                     const tabName = tab.getAttribute('tab');
