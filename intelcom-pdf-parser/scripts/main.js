@@ -89,18 +89,18 @@ FORMS.register('import', async formData => {
             const delivery = [];
             for (const row of rows) {
                 delivery.push({
-                    'date': new Date(row[0]),
-                    'withSignature': {
-                        'quantity': parseInt(row[3]),
-                        'commission': currency(row[2])
+                    date: new Date(row[0]),
+                    withSignature: {
+                        quantity: parseInt(row[3]),
+                        commission: currency(row[4])
                     },
-                    'withoutSignature': {
-                        'quantity': parseInt(row[3]),
-                        'commission': currency(row[4])
+                    withoutSignature: {
+                        quantity: parseInt(row[1]),
+                        commission: currency(row[2])
                     },
-                    'amount': currency(row[6]),
-                    'additionalPayout': currency(row[7]),
-                    'grandTotal': currency(row[8])
+                    amount: currency(row[6]),
+                    additionalPayout: currency(row[7]),
+                    grandTotal: currency(row[8])
                 });
             }
 
@@ -109,16 +109,16 @@ FORMS.register('import', async formData => {
             const week = parseInt(weekPieces[1]);
 
             const idNameSeperation = driver.indexOf(' ');
-            const id = driver.substr(0, idNameSeperation);
-            const name = driver.substr(idNameSeperation + 1);
+            const driverId = driver.substr(0, idNameSeperation);
+            const driverName = driver.substr(idNameSeperation + 1);
 
             resolve({
-                'id': id,
-                'name': name,
-                'invoiceNumber': invoiceNumber,
-                'year': year,
-                'week': week,
-                'delivery': delivery
+                driverId,
+                driverName,
+                invoiceNumber,
+                year,
+                week,
+                delivery
             });
         };
         reader.onerror = error => reject(error);
@@ -170,29 +170,72 @@ FORMS.register('export', async formData => {
 
     const query = await database.collection('invoices').where('week', '>=', fromWeek).where('week', '<=', toWeek).get();
 
+    let weekSpecificOffset;
+    let weekSpecificCount;
+    let weekSpecificEnd;
+
     const header = [];
     header.push('Beneficiary', 'TrPr', 'RtN', 'RtY', 'Rtl');
+    weekSpecificOffset = header.length;
     for (let i = fromWeek; i <= toWeek; i++) {
-        header.push(`W${i} SgN`, `W${i} SgY`, `W${i} InvAmt`, `W${i} InvPr`);
+        const weekSpecificColumns = [`W${i} SgN`, `W${i} SgY`, `W${i} InvAmt`, `W${i} InvPr`];
+        weekSpecificCount = weekSpecificColumns.length;
+        header.push(...weekSpecificColumns);
     }
-    header.push('Ttl SgN', 'TtlSgY', 'TtlIvPr', 'Ttl InvAmt', 'Gross Earnings');
-
-    const weekOffset = 5;
-    const weekColumns = 4;
+    weekSpecificEnd = header.length;
+    header.push('Ttl SgN', 'Ttl SgY', 'Ttl IvPr', 'Ttl InvAmt', 'Gross Earnings');
 
     const data = {};
-
     query.forEach(invoiceDocument => {
         const invoice = invoiceDocument.data();
         if (invoice.year >= fromYear && invoice.year <= toYear) {
+            console.log(invoice);
+            let row;
+            if (!(invoice.driverId in data)) {
+                row = new Array(header.length);
+                row.fill('unknown');
+                row[0] = invoice.driverName;
+                data[invoice.driverId] = row;
 
+                for (let i = 0; i <= toWeek - fromWeek; i++) {
+                    row[weekSpecificOffset + weekSpecificCount * i + 0] = 0;
+                    row[weekSpecificOffset + weekSpecificCount * i + 1] = 0;
+                    row[weekSpecificOffset + weekSpecificCount * i + 2] = 0;
+                    row[weekSpecificOffset + weekSpecificCount * i + 3] = 0;
+                }
+                row[weekSpecificEnd + 0] = 0;
+                row[weekSpecificEnd + 1] = 0;
+                row[weekSpecificEnd + 2] = 0;
+                row[weekSpecificEnd + 3] = 0;
+                row[weekSpecificEnd + 4] = 0;
+            }
+            let withSignature = 0;
+            let withoutSignature = 0;
+            const weekNumber = invoice.week - fromWeek;
+            for (const delivery of invoice.delivery) {
+                withSignature += delivery.withSignature.quantity;
+                withoutSignature += delivery.withoutSignature.quantity;
+            }
+
+            row[weekSpecificOffset + weekSpecificCount * weekNumber + 0] += withoutSignature;
+            row[weekSpecificOffset + weekSpecificCount * weekNumber + 1] += withSignature;
+            row[weekSpecificOffset + weekSpecificCount * weekNumber + 2] = 0;
+            row[weekSpecificOffset + weekSpecificCount * weekNumber + 3] += withSignature + withoutSignature;
+
+            row[weekSpecificEnd + 0] += withoutSignature;
+            row[weekSpecificEnd + 1] += withSignature;
+            row[weekSpecificEnd + 2] += 0;
+            row[weekSpecificEnd + 3] += withSignature + withoutSignature;
         }
     });
 
     const rows = [header, ...Object.values(data)];
-    for (const row of rows) {
-        console.log(row.join(','));
-    }
+    const formattedData = rows.map(row => row.join()).join('\n');
+
+    const downloadLink = document.getElementById('exportDownload');
+    downloadLink.href = `data:text/plain;charset=utf-8,${encodeURIComponent(formattedData)}`;
+    downloadLink.download = `${fromYear} W${fromWeek}-W${toWeek}.csv`;
+
 
     if (rows.length === 1) {
         FORMS.display('export', 'No results to export. Try changing your date range.', 'error');
