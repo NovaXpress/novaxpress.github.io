@@ -1,6 +1,7 @@
 function format(input, lineNumber) {
-    console.log(input);
     const lines = [];
+
+    const hrmPostalCodes = ["B2T", "B3A", "B3B", "B3C", "B3D", "B3E", "B3F", "B3G", "B3H", "B3I", "B3J", "B3K", "B3L", "B3M", "B3N", "B3O", "B3P", "B3Q", "B3R", "B3S", "B3T", "B3U", "B3V", "B3W", "B3X", "B3Y", "B3Z", "B4A", "B4B", "B4C", "B4D", "B4E", "B4F", "B4G"];
 
     if (lineNumber == 0) {
         lines.push('Building_Identifier,Route_Identifier,alt_barcode,conv_time_date,status,consignee_street_name,consignee_city,Prov,consignee_postal_code,Customer_Name,Sig_Confirm_Information_sign_or_location');
@@ -47,6 +48,10 @@ function format(input, lineNumber) {
             status = 'OFD';
         } else if (statusDescription.includes('no access')) {
             status = 'NAC';
+        }
+
+        if (hrmPostalCodes.includes(postalCode.substring(0, 3))) {
+            routeIdentifier = 'HRM';
         }
 
         lines.push([
