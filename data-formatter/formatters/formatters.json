@@ -8,5 +8,10 @@
         "name": "ShipTrack to UPS Report",
         "file": "shiptrack-to-ups-report.js",
         "output_extension": "csv"
+    },
+    {
+        "name": "BNI to ShipTrack",
+        "file": "bni-to-shiptrack.js",
+        "output_extension": "csv"
     }
 ]

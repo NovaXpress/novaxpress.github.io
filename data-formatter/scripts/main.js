@@ -54,7 +54,26 @@ FORMS.register('formatter', async data => {
         const formatter = formatters[formatterFile];
 
         const formattedRows = [];
-        const lines = fileData.split('\n');
+
+        let quoted = false;
+        let lineCharacters = [];
+        let lines = [];
+        for (let i = 0; i < fileData.length; i++) {
+            const character = fileData[i];
+            if (character === '"') {
+                if (i == 0 || fileData[i - 1] != '\\') {
+                    quoted = !quoted;
+                }
+            }
+            lineCharacters.push(character);
+            if (character === '\n') {
+                if (!quoted) {
+                    lines.push(lineCharacters.join(''));
+                    lineCharacters = [];
+                }
+            }
+        }
+
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             if (line) {
