@@ -20,6 +20,17 @@ function format(input) {
             piece.push(character);
         }
     }
+
+    let fullAddress = pieces[1];
+
+    const postalCode = fullAddress.substr(fullAddress.length - 7, 7);
+    fullAddress = fullAddress.substr(0, fullAddress.length - 7);
+
+    const addressPieces = fullAddress.split(',').map(piece => piece.trim());
+
+    const addressLine = addressPieces[0] || '';
+    const city = addressPieces[1] || '';
+
     if (pieces.length != 2 || !pieces[0].startsWith('BNI')) return null;
     return [
         'BNIAGENT',
@@ -31,12 +42,12 @@ function format(input) {
         '',
         '',
         '',
-        pieces[1],
+        addressLine,
         '',
         '',
+        city,
         '',
-        '',
-        '',
+        postalCode,
         '',
         pieces[0],
         '',
