@@ -26,10 +26,28 @@ function format(input) {
     const postalCode = fullAddress.substr(fullAddress.length - 7, 7);
     fullAddress = fullAddress.substr(0, fullAddress.length - 7);
 
-    const addressPieces = fullAddress.split(',').map(piece => piece.trim());
+    let addressPieces = fullAddress.split(',').map(piece => piece.trim());
+    if (addressPieces.length < 2) {
+        const addressSuffixes = ['crescent', 'court', 'path', 'loop', 'cres', 'place', 'street', 'avenue', 'drive', 'lane', 'road', 'crt', 'ave', 'st', 'rd', 'dr', 'ln']
+            .sort((a, b) => b.length - a.length);
+        for (const suffix of addressSuffixes) {
+            addressPieces = fullAddress.split(new RegExp(`(?<= ${suffix})\.?`, 'i')).map(piece => piece.trim());
+            if (addressPieces.length >= 2) break;
+        }
+    }
+    if (addressPieces.length < 2) {
+        const numberMatches = fullAddress.match(/[0-9]+/g);
+        if (numberMatches && numberMatches.length > 1) {
+            addressPieces = fullAddress.split(/(?=(?<=[0-9])[^0-9]*$)/).map(piece => piece.trim());
+        }
+    }
 
-    const addressLine = addressPieces[0] || '';
-    const city = addressPieces[1] || '';
+    const addressLine = addressPieces[0] || 'Unknown';
+    const city = addressPieces[1] || 'Unknown';
+
+    if (!addressPieces[1]) {
+        console.log(addressPieces, fullAddress);
+    }
 
     if (pieces.length != 2 || !pieces[0].startsWith('BNI')) return null;
     return [
