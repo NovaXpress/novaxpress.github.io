@@ -13,5 +13,10 @@
         "name": "BNI to ShipTrack",
         "file": "bni-to-shiptrack.js",
         "output_extension": "csv"
+    },
+    {
+        "name": "New BNI to ShipTrack (Convert to CSV First)",
+        "file": "new-bni-to-shiptrack.js",
+        "output_extension": "csv"
     }
 ]
