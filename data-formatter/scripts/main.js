@@ -3,7 +3,7 @@ async function readFileData(file) {
         const reader = new FileReader();
         reader.onload = event => resolve(event.target.result);
         reader.onerror = error => reject(error);
-        reader.readAsBinaryString(file);
+        reader.readAsText(file);
     });
 }
 
@@ -89,6 +89,7 @@ FORMS.register('formatter', async data => {
         }
 
         const outputFileName = file.name.replace(/\.[A-Za-z]+/, '-generated.' + formatter['output_extension']);
+
 
         const formattedData = formattedRows.join('\n');
         const downloadElement = document.createElement('a');
