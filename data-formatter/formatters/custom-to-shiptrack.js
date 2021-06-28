@@ -1,12 +1,20 @@
 function aabb(index) {
     let sequence = [0];
     while (index-- > 0) {
-        const index = sequence.length - 1;
-        if (sequence[index] + 1 < 26) {
-            sequence[index]++;
+        const last = sequence.length - 1;
+        if (sequence[last] + 1 < 26) {
+            sequence[last]++;
         } else {
-            sequence[index] = 0;
-            sequence.push(0);
+            let carried = false;
+            for (let i = last; !carried && i >= 0; i--) {
+                if (sequence[i] + 1 < 26) {
+                    sequence[i]++;
+                    carried = true;
+                } else {
+                    sequence[i] = 0;
+                }
+            }
+            if (!carried) sequence.unshift(0);
         }
     }
     return sequence.map(index => String.fromCharCode(65 + index)).join('');
