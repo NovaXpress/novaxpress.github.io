@@ -1,81 +1,71 @@
+function getProvinceCode(province) {
+    return {
+        "newfoundland and labrador": "NL",
+        "prince edward island": "PE",
+        "nova scotia": "NS",
+        "new brunswick": "NB",
+        "quebec": "QC",
+        "ontario": "ON",
+        "manitoba": "MB",
+        "saskatchewan": "SK",
+        "alberta": "AB",
+        "british columbia": "BC",
+        "northwest territories": "NT",
+        "nunavut": "NU"
+    }[province.toLowerCase()] || '??';
+}
+
 function format(input) {
-    let pieces = [];
-    let piece = [];
-    let quoted = false;
-    for (let i = 0; i < input.length; i++) {
-        const character = input[i];
-        if (character === '"') {
-            if (i == 0 || input[i - 1] != '\\') {
-                quoted = !quoted;
-            }
-        }
-        if (i == input.length - 1 || (character === ',' && !quoted)) {
-            let cell = piece.join('').trim();
-            while (cell[0] === '"' && cell[cell.length - 1] === '"') {
-                cell = cell.substr(1, cell.length - 2);
-            }
-            pieces.push(cell.trim().replace(/\s+/g, ' '));
-            piece = [];
-        } else {
-            piece.push(character);
-        }
+    const pieces = input.split(',');
+
+    if (pieces[0] === 'Reference ID') return null;
+
+    const agent = 'BNIAGENT';
+    const name = pieces[2];
+    const address1 = pieces[3];
+    const address2 = pieces[4];
+    const city = pieces[5];
+    const province = getProvinceCode(pieces[6]);
+    const postalCode = pieces[8];
+    const country = pieces[7].toLowerCase() === 'canada' ? 'CA' : '??';
+    const trackingId = pieces[1];
+    const reference = pieces[0];
+    const serviceLabel = 'BNI_STD';
+
+    if (province === '??') {
+        throw new Error('Unsupported pronvice: ' + pieces[6]);
     }
 
-    let fullAddress = pieces[1];
-
-    const postalCode = fullAddress.substr(fullAddress.length - 7, 7);
-    fullAddress = fullAddress.substr(0, fullAddress.length - 7);
-
-    let addressPieces = fullAddress.split(',').map(piece => piece.trim());
-    if (addressPieces.length < 2) {
-        const addressSuffixes = ['crescent', 'court', 'path', 'loop', 'cres', 'place', 'street', 'avenue', 'drive', 'lane', 'road', 'crt', 'ave', 'st', 'rd', 'dr', 'ln']
-            .sort((a, b) => b.length - a.length);
-        for (const suffix of addressSuffixes) {
-            addressPieces = fullAddress.split(new RegExp(`(?<= ${suffix})\.?`, 'i')).map(piece => piece.trim());
-            if (addressPieces.length >= 2) break;
-        }
-    }
-    if (addressPieces.length < 2) {
-        const numberMatches = fullAddress.match(/[0-9]+/g);
-        if (numberMatches && numberMatches.length > 1) {
-            addressPieces = fullAddress.split(/(?=(?<=[0-9])[^0-9]*$)/).map(piece => piece.trim());
-        }
+    if (country === '??') {
+        throw new Error('Unsupported country: ' + pieces[7]);
     }
 
-    const addressLine = addressPieces[0] || 'Unknown';
-    const city = addressPieces[1] || 'Unknown';
-
-    if (!addressPieces[1]) {
-        console.log(addressPieces, fullAddress);
-    }
-
-    if (pieces.length != 2 || !pieces[0].startsWith('BNI')) return null;
     return [
-        'BNIAGENT',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        addressLine,
-        '',
-        '',
-        city,
-        '',
-        postalCode,
-        '',
-        pieces[0],
-        '',
-        `REF${pieces[0]}`,
-        1,
-        14,
-        'l',
-        '',
-        'BNI_STD',
-        '',
-        ''
+        /* 1 Shipper's Account Number (EDI client ID)                  */ agent,
+        /* 2 Shipper's Name                                            */ '',
+        /* 3 Shipper's Address line 1                                  */ '',
+        /* 4 Shipper's Address line 2                                  */ '',
+        /* 5 Shipper's Address line 3                                  */ '',
+        /* 6 Shipper's City                                            */ '',
+        /* 7 Shipper's Province                                        */ '',
+        /* 8 Shipper's Postal Code                                     */ '',
+        /* 9 Consignee's Name                                          */ name,
+        /* 10 Consignee's Address line 1                               */ address1,
+        /* 11 Consignee's Address line 2                               */ address2,
+        /* 12 Consignee's Address line 3                               */ '',
+        /* 13 Consignee's City                                         */ city,
+        /* 14 Consignee's Province                                     */ province,
+        /* 15 Consignee's Postal Code                                  */ postalCode,
+        /* 16 Country Code Abbreviation                                */ country,
+        /* 17 Unique Barcode on Package                                */ trackingId,
+        /* 18 Shipper's Reference Number (Reference 1)                 */ reference,
+        /* 19 Consignee's Reference Number (Shipment Reference Number) */ '',
+        /* 20 Piece Number and/or Count for Shipment                   */ 1,
+        /* 21 Piece Weight for Package                                 */ 1,
+        /* 22 Unit of Measurement (Weight)                             */ 'l',
+        /* 23 Special Instructions (Job comments)                      */ '',
+        /* 24 Service Level (Service type code)                        */ serviceLabel,
+        /* 25 Consignee's Phone Number                                 */ '',
+        /* 26 Consignee's Email Address                                */ ''
     ].map(item => `"${item}"`).join('|');
 }

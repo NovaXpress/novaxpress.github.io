@@ -88,8 +88,21 @@ FORMS.register('formatter', async data => {
             }
         }
 
-        const outputFileName = file.name.replace(/\.[A-Za-z]+/, '-generated.' + formatter['output_extension']);
-
+        let outputFileName;
+        let extension = formatter['output_extension'];
+        let fileName = formatter['output_file'];
+        if (extension) {
+            outputFileName = file.name.replace(/\.[A-Za-z]+/, '-generated.' + extension);
+        } else if (fileName) {
+            const now = new Date();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const date = now.getDate().toString().padStart(2, '0');
+            const year = now.getFullYear().toString().substr(2, 2);
+            fileName = fileName.replace('<date>', `${month}${date}${year}`);
+            outputFileName = fileName;
+        } else {
+            throw new Error('Invalid formatter output');
+        }
 
         const formattedData = formattedRows.join('\n');
         const downloadElement = document.createElement('a');
