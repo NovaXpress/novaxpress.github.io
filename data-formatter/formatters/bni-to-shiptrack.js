@@ -1,8 +1,10 @@
 function getProvinceCode(province) {
+    province = province.toLowerCase().replace(/[^a-z]/g, '');
     return {
         "newfoundland and labrador": "NL",
         "prince edward island": "PE",
         "nova scotia": "NS",
+        "ns": "NS",
         "new brunswick": "NB",
         "quebec": "QC",
         "ontario": "ON",
@@ -12,7 +14,7 @@ function getProvinceCode(province) {
         "british columbia": "BC",
         "northwest territories": "NT",
         "nunavut": "NU"
-    }[province.toLowerCase()] || '??';
+    }[province] || '??';
 }
 
 function format(input) {
@@ -22,7 +24,7 @@ function format(input) {
 
     const agent = 'BNIAGENT';
     const name = pieces[2];
-    const address1 = pieces[3];
+    const address1 = pieces[3].replace('Trunk', 'Highway');
     const address2 = pieces[4];
     const city = pieces[5];
     const province = getProvinceCode(pieces[6]);
