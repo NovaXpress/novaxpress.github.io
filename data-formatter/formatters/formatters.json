@@ -15,13 +15,13 @@
         "output_extension": "csv"
     },
     {
-        "name": "Custom Format to Shiptrack",
-        "file": "custom-to-shiptrack.js",
-        "output_extension": "csv"
-    },
-    {
         "name": "ShipTrack to BNI Report",
         "file": "shiptrack-to-bni-report.js",
         "output_file": "BNI Report <date>.csv"
+    },
+    {
+        "name": "Custom Format to Shiptrack",
+        "file": "custom-to-shiptrack.js",
+        "output_extension": "csv"
     }
 ]
