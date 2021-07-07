@@ -25,7 +25,8 @@ function format(input, index) {
 
     let column = 0;
     const agent = pieces[column++] || '!!! MISSING INFORMATION !!!';
-    const id = pieces[column++] || '!!! MISSING INFORMATION !!!';
+    const trackingId = pieces[column++] || '!!! MISSING INFORMATION !!!';
+    const referenceId = pieces[column++] || `REF${trackingId}`;
     const name = pieces[column++] || aabb(index);
     const address1 = pieces[column++] || 'Unknown';
     const address2 = pieces[column++] || '';
@@ -52,9 +53,9 @@ function format(input, index) {
     /* 14 Consignee's Province                                     */ province,
     /* 15 Consignee's Postal Code                                  */ postalCode,
     /* 16 Country Code Abbreviation                                */ country,
-    /* 17 Unique Barcode on Package                                */ id,
+    /* 17 Unique Barcode on Package                                */ trackingId,
     /* 18 Shipper's Reference Number (Reference 1)                 */ '',
-    /* 19 Consignee's Reference Number (Shipment Reference Number) */ `REF${id}`,
+    /* 19 Consignee's Reference Number (Shipment Reference Number) */ referenceId,
     /* 20 Piece Number and/or Count for Shipment                   */ 1,
     /* 21 Piece Weight for Package                                 */ 1,
     /* 22 Unit of Measurement (Weight)                             */ 'l',
