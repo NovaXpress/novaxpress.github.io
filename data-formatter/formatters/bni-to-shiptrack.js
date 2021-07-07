@@ -17,6 +17,16 @@ function getProvinceCode(province) {
     }[province] || '??';
 }
 
+// A: Reference Id
+// B: Tracking Id
+// C: Name
+// D: Address1
+// E: Address2
+// F: City
+// G: Province
+// H: Country
+// I: Postal Code
+
 function format(input) {
     let pieces = [];
     let piece = [];
@@ -42,16 +52,16 @@ function format(input) {
 
     if (pieces[0] === 'Reference ID') return null;
 
-    const agent = 'BNIAGENT';
+    const reference = pieces[0];
+    const trackingId = pieces[1];
     const name = pieces[2];
     const address1 = pieces[3].replace('Trunk', 'Highway');
     const address2 = pieces[4];
     const city = pieces[5];
     const province = getProvinceCode(pieces[6]);
-    const postalCode = pieces[8];
     const country = pieces[7].substr(0, 2).toUpperCase();
-    const trackingId = pieces[1];
-    const reference = pieces[0];
+    const postalCode = pieces[8];
+    const agent = 'BNIAGENT';
     const serviceLabel = 'BNI_STD';
 
     if (province === '??') {
