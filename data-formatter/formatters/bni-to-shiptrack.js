@@ -93,7 +93,7 @@ function format(input) {
         /* 16 Country Code Abbreviation                                */ country,
         /* 17 Unique Barcode on Package                                */ trackingId,
         /* 18 Shipper's Reference Number (Reference 1)                 */ reference,
-        /* 19 Consignee's Reference Number (Shipment Reference Number) */ '',
+        /* 19 Consignee's Reference Number (Shipment Reference Number) */ reference,
         /* 20 Piece Number and/or Count for Shipment                   */ 1,
         /* 21 Piece Weight for Package                                 */ 1,
         /* 22 Unit of Measurement (Weight)                             */ 'l',
