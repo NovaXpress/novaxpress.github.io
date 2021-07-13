@@ -54,7 +54,7 @@ function format(input, index) {
     /* 15 Consignee's Postal Code                                  */ postalCode,
     /* 16 Country Code Abbreviation                                */ country,
     /* 17 Unique Barcode on Package                                */ trackingId,
-    /* 18 Shipper's Reference Number (Reference 1)                 */ '',
+    /* 18 Shipper's Reference Number (Reference 1)                 */ referenceId,
     /* 19 Consignee's Reference Number (Shipment Reference Number) */ referenceId,
     /* 20 Piece Number and/or Count for Shipment                   */ 1,
     /* 21 Piece Weight for Package                                 */ 1,
